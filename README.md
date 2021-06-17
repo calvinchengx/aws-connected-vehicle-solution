@@ -59,19 +59,103 @@ Each microservice follows the structure of:
   |-package.json
 </pre>
 
-#### v2.1.0 changes
+### Using Serverless Application Model (command line tool) to test locally
 
 ```
-* [Update] Upgrade AWS Lambda version to 8.10
+# STEP 1
 
+brew tap aws/tap
+brew install aws-sam-cli
+
+sam --version
+
+
+# STEP 2
+
+In each folder for aws-connected-vehicle-solution source code, we want to add in buildspec.yaml and template.yaml
 ```
 
-***
 
-Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Example of template.yaml
 
-Licensed under the Amazon Software License (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
+```
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
 
-    http://aws.amazon.com/asl/
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  sam-app
 
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions and limitations under the License.
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  # This is a Lambda function config associated with the source code: index.js
+  handler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Timeout: 100
+      Description: A Lambda function that returns a static string.
+      Policies:
+        # Give Lambda basic execution Permission to the helloFromLambda
+        - AWSLambdaBasicExecutionRole
+```
+
+buildspec file is the same for every folder
+
+```
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Install all dependencies (including dependencies for running tests)
+      - npm install
+  pre_build:
+    commands:
+      # Discover and run unit tests in the '__tests__' directory
+      - npm run test
+      # Remove all unit tests to reduce the size of the package that will be ultimately uploaded to Lambda
+      - rm -rf ./__tests__
+      # Remove all dependencies not needed for the Lambda deployment package (the packages from devDependencies in package.json)
+      - npm prune --production
+  build:
+    commands:
+      # Use AWS SAM to package the application by using AWS CloudFormation
+      - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+artifacts:
+  type: zip
+  files:
+    - template-export.yml
+```
+
+Each of these folders should have its own
+- template.yaml
+- buildspec.yaml
+
+source/resources/helper
+source/services/anomaly
+source/services/driversafety
+source/services/dtc
+source/services/jitr
+source/services/marketing
+source/services/notification
+source/services/vehicle
+
+And once we have template.yaml and buildspec.yaml in each folder, we can one by one test each folder's serverless function using the command
+
+```
+sam build && sam local invoke
+```
