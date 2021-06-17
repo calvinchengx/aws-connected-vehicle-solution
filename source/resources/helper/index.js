@@ -29,6 +29,9 @@ const UUID = require('node-uuid');
  * Request handler.
  */
 exports.handler = (event, context, callback) => {
+    let _dynamoHelper = new DynamoHelper();
+    _dynamoHelper.whereIsCsv();
+    console.log('HELLO HELLO HELLO')
     console.log('Received event:', JSON.stringify(event, null, 2));
 
     let responseStatus = 'FAILED';

@@ -17,18 +17,6 @@
 
 'use strict';
 
-let moment = require('moment');
-let AWS = require('aws-sdk');
-const fs = require('fs');
-let csv = require('fast-csv');
-let codes_info = [];
-
-let creds = new AWS.EnvironmentCredentials('AWS'); // Lambda provided credentials
-const dynamoConfig = {
-    credentials: creds,
-    region: process.env.AWS_REGION
-};
-
 /**
  * Helper function to interact with dynamodb for data lake cfn custom resource.
  *
@@ -36,11 +24,63 @@ const dynamoConfig = {
  */
 let dynamoDBHelper = (function() {
 
+    let moment = require("moment");
+    let AWS = require("aws-sdk");
+    const fs = require("fs");
+    let csv = require("fast-csv");
+    let codes_info = [];
+
+    let creds = new AWS.EnvironmentCredentials("AWS"); // Lambda provided credentials
+    const dynamoConfig = {
+      credentials: creds,
+      region: process.env.AWS_REGION,
+    };
+
     /**
      * @class dynamoDBHelper
      * @constructor
      */
     let dynamoDBHelper = function() {};
+
+    dynamoDBHelper.prototype.whereIsCsv = function () {
+        // const csv = require('fast-csv');
+        console.info('DO WE HAVE OUR CSV imported correctly in the first place?')
+        console.log(csv)
+        let parser = csv.parse({ headers: false });
+        console.log('THIS IS OUR PARSER')
+        console.log(parser);
+        let fileStream = fs.createReadStream('./marketing-pois.csv');
+        fileStream
+            .on('readable', function() {
+                var data;
+                while ((data = fileStream.read()) !== null) {
+                    parser.write(data);
+                }
+            })
+            .on('end', function() {
+                parser.end();
+            });
+
+        parser
+            .on('readable', function() {
+                var data;
+                while ((data = parser.read()) !== null) {
+                    codes_info.push({
+                        poi_id: data[0],
+                        address: data[1],
+                        city: data[2],
+                        latitude: data[3],
+                        longitude: data[4],
+                        message: data[5],
+                        poi: data[6],
+                        radius: data[7],
+                        state: data[8]
+                    });
+                }
+            }).on('end', function() {
+                parser.end()
+            })
+    }
 
     /**
      * Loads POIs into marketing table.
@@ -48,7 +88,7 @@ let dynamoDBHelper = (function() {
      * @param {loadDtcCodes~requestCallback} cb - The callback that handles the response.
      */
     dynamoDBHelper.prototype.loadPois = function(ddbTable, cb) {
-
+        console.log(csv());
         let parser = csv();
         let fileStream = fs.createReadStream('./marketing-pois.csv');
         fileStream

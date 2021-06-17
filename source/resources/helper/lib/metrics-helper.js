@@ -17,15 +17,16 @@
 
 'use strict';
 
-let moment = require('moment');
-let https = require('https');
-
 /**
  * Helper function to interact with dynamodb for data lake cfn custom resource.
  *
  * @class metricsHelper
  */
 let metricsHelper = (function() {
+
+    
+    let moment = require('moment');
+    let https = require('https');
 
     /**
      * @class metricsHelper

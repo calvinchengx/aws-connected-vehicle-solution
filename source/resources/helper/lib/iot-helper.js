@@ -17,8 +17,7 @@
 
 'use strict';
 
-let moment = require('moment');
-let AWS = require('aws-sdk');
+
 
 /**
  * Helper function to interact with AWS IoT for cfn custom resource.
@@ -26,6 +25,9 @@ let AWS = require('aws-sdk');
  * @class iotHelper
  */
 let iotHelper = (function() {
+
+    let moment = require('moment');
+    let AWS = require('aws-sdk');
 
     /**
      * @class iotHelper
