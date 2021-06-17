@@ -145,17 +145,19 @@ Each of these folders should have its own
 - template.yaml
 - buildspec.yaml
 
-source/resources/helper
-source/services/anomaly
-source/services/driversafety
-source/services/dtc
-source/services/jitr
-source/services/marketing
-source/services/notification
-source/services/vehicle
+Each of the services and help functions are in these sub-folders
+- source/resources/helper
+- source/services/anomaly
+- source/services/driversafety
+- source/services/dtc
+- source/services/jitr
+- source/services/marketing
+- source/services/notification
+- source/services/vehicle
 
 And once we have template.yaml and buildspec.yaml in each folder, we can one by one test each folder's serverless function using the command
 
 ```
+# STEP 3
 sam build && sam local invoke
 ```
