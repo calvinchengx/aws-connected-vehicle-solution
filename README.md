@@ -13,7 +13,8 @@ export REGION=us-east-1
 
 * Create a Amazon S3 distribution bucket. The name has to be suffixed with the target region. _Note:_ you must have the AWS Command Line Interface installed.
 ```
-aws s3api create-bucket --bucket $BUCKET_PREFIX-$REGION --region $REGION
+aws s3api create-bucket --bucket $BUCKET_PREFIX-$REGION --region $REGION --create-bucket-configuration LocationConstraint=$REGION
+
 ```
 
 * Clone the repository, then build the distibutables:
