@@ -28,7 +28,7 @@ let dynamoDBHelper = (function() {
     let AWS = require("aws-sdk");
     const fs = require("fs");
     let csv = require("fast-csv");
-    let response = require('cfn-response-promise');
+    //let response = require('cfn-response-promise');
     let codes_info = [];
 
     let creds = new AWS.EnvironmentCredentials("AWS"); // Lambda provided credentials
@@ -101,7 +101,7 @@ let dynamoDBHelper = (function() {
      * @param {string} ddbTable - DTC reference table.
      * @param {loadDtcCodes~requestCallback} cb - The callback that handles the response.
      */
-    dynamoDBHelper.prototype.loadDtcCodes = function(event, context, ddbTable, cb) {
+    dynamoDBHelper.prototype.loadDtcCodes = function(ddbTable, cb) {
         console.info('loadDtcCodes loadDtcCodes loadDtcCodes')
         let parser = csv.parse({ headers: false });
         let fileStream = fs.createReadStream('./obd-trouble-codes.csv');
@@ -138,10 +138,8 @@ let dynamoDBHelper = (function() {
                         console.log('Successfully loaded DTC reference table.');
                     }
                     console.log(cb);
-                    cb(null, 'success');
-                    let responseStatus = 'SUCCESS';
-                    let responseData = {};
-                    response.send(event, context, responseStatus, responseData);
+                    cb(null, response.SUCCESS);
+                    //response.send(event, context, response.SUCCESS, responseData);
                 });
             });
 

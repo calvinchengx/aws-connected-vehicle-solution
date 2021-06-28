@@ -143,7 +143,7 @@ exports.handler = (event, context, callback) => {
 
         } else if (event.ResourceProperties.customAction === 'loadDtcCodes') {
             let _dynamoHelper = new DynamoHelper();
-            _dynamoHelper.loadDtcCodes(event, context, event.ResourceProperties.tableName, function(err, data) {
+            _dynamoHelper.loadDtcCodes(event.ResourceProperties.tableName, function(err, data) {
                 console.log(event.ResourceProperties.tableName);
                 console.log(data);
                 if (err) {

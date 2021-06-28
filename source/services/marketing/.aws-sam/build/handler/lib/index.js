@@ -17,25 +17,18 @@
 
 'use strict';
 
-console.log('Loading function');
+let AWS = require('aws-sdk');
+let advertisement = require('./marketing.js');
 
+module.exports.respond = function(event, cb) {
 
-exports.handler = function(event, context, callback) {
-    // Load the message passed into the Lambda function into a JSON object
-    let lib = require('./lib');
-    var eventText = JSON.stringify(event, null, 2);
-
-    // Log a message to the console, you can view this text in the Monitoring tab in the Lambda console
-    // or in the CloudWatch Logs console
-    console.log('Received event:', eventText);
-
-    lib.respond(event, function(error, response) {
-        if (error) {
-            console.error(error);
-            return callback(null, error);
-        } else {
-            return callback(null, response);
+    let _ad = new advertisement();
+    _ad.getPoints(event, function(err, data) {
+        if (err) {
+            return cb(err, null);
         }
+
+        return cb(null, data);
     });
 
 };

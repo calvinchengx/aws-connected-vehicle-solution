@@ -18,7 +18,7 @@ Resources:
             Handler: index.handler
             Role:
                 Fn::GetAtt: [ LocationBasedMarketingRole , "Arn" ]
-            Runtime: nodejs8.10
+            Runtime: nodejs12.x
             Timeout: 10
             MemorySize: 256
             Environment:
@@ -1506,7 +1506,7 @@ Resources:
               S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
               S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "vhr-vehicle-jitr.zip"]]
           Handler: index.handler
-          Runtime: nodejs8.10
+          Runtime: nodejs12.x
           Role: !GetAtt JitrServiceRole.Arn
           Timeout: 300
           MemorySize: 256
@@ -1519,7 +1519,7 @@ Resources:
               S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
               S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "vhr-anomaly-service.zip"]]
           Handler: index.handler
-          Runtime: nodejs8.10
+          Runtime: nodejs12.x
           Role: !GetAtt AnomalyServiceRole.Arn
           Timeout: 300
           MemorySize: 256
@@ -1546,7 +1546,7 @@ Resources:
               S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
               S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "vhr-dtc-service.zip"]]
           Handler: index.handler
-          Runtime: nodejs8.10
+          Runtime: nodejs12.x
           Role: !GetAtt DtcServiceRole.Arn
           Timeout: 300
           MemorySize: 256
@@ -1564,7 +1564,7 @@ Resources:
               S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
               S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "vhr-notification-service.zip"]]
           Handler: index.handler
-          Runtime: nodejs8.10
+          Runtime: nodejs12.x
           Role: !GetAtt NotificationServiceRole.Arn
           Timeout: 300
           MemorySize: 256
@@ -1581,7 +1581,7 @@ Resources:
               S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
               S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "vhr-driver-safety-service.zip"]]
           Handler: index.handler
-          Runtime: nodejs8.10
+          Runtime: nodejs12.x
           Role: !GetAtt DriverSafetyServiceRole.Arn
           Timeout: 300
           MemorySize: 256
@@ -1598,7 +1598,7 @@ Resources:
               S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
               S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "vhr-vehicle-service.zip"]]
           Handler: index.handler
-          Runtime: nodejs8.10
+          Runtime: nodejs12.x
           Role: !GetAtt VehicleServiceRole.Arn
           Timeout: 300
           MemorySize: 256
@@ -2424,7 +2424,7 @@ Resources:
                 Fn::GetAtt:
                     - "ConnectedVehicleHelperRole"
                     - "Arn"
-            Runtime: "nodejs8.10"
+            Runtime: "nodejs12.x"
             Timeout: "300"
 
 

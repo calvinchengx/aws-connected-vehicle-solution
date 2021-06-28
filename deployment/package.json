@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "cfn-response-promise": "^1.1.0"
+  }
+}

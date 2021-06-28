@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: sam-app
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  handler:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: marketing
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          POI_TBL:
+            Ref: PoiTbl
+      MemorySize: 128
+      Timeout: 100
+      Description: A Lambda function that returns a static string.
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      CodeUri: handler
